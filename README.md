@@ -468,3 +468,109 @@ da click hasta el elemento de la lista (`<li />`) y haciendo uso del método
 `.remove()` nos basta para quitar por completo dicho elemento de nuestro HTML.
 
 Puedes ver el código que llevamos hasta este punto en [este CodePen](https://codepen.io/ivandevp/pen/mdbLKGG).
+
+Por último, pero no menos importante, debemos de mostrar las tareas que están
+pendientes de ser completadas. Para llevar a cabo este paso, podemos pensar de
+muchas maneras y vamos a usar una forma muy simple para fines didácticos. Usemos
+un contador global, :scream: lo sé, acabo de mencionar líneas arriba que variables
+globales son cosas del mundo oscuro, pero estamos aprendiendo :woman_shrugging:.
+Nuestro contador inicia en 0, pues no tenemos tareas hasta que la usuaria lo
+agregue, cuando se agrega una tarea, nuestro contador debe incrementarse en 1;
+es decir, si agregamos 2 tareas, deberíamos sumar 1 dos veces y por lo tanto
+nuestro contador debería tener el valor de 2. Cada vez que marquemos como
+eliminado o completado deberíamos disminuir el contador en 1. Si tenemos 2 tareas
+y eliminamos o completamos 1, debemos restar 1 a nuestro contador y por lo tanto
+su valor sería 1. El caso más complejo es que si hay una tarea marcada como
+completada y la usuaria le vuelve a dar click, debemos de incrementar nuestro
+contador y mostrar el valor correcto. Manos a la obra:
+
+```js
+let pendingTasks = 0;
+
+/** ...código anterior... */
+
+input.addEventListener('keydown', (event) => {
+  // Verificamos que la tecla presionada sea la de `Enter`
+  if (event.keyCode === 13) { // 13 es el código ascii de la tecla `Enter`
+    // código de agregar una tarea
+
+    newTodoCompleteCheckbox.addEventListener('change', (event) => {
+      // código de completar una tarea
+
+      // Si el estado del checkbox está marcado, restamos el contador
+      if (event.target.checked) {
+        pendingTasks -= 1;
+      } else {
+        // Caso contrario, aumentamos el contador
+        pendingTasks += 1;
+      }
+    });
+
+    newTodoDestroyButton.addEventListener('click', (event) => {
+      // código de eliminar una tarea
+
+      // Disminuimos el contador de tareas pendientes
+      pendingTasks -= 1;
+    });
+
+    // Aumentamos el contador de tareas pendientes
+    pendingTasks += 1;
+  }
+});
+
+/** ...código que prosigue... **/
+```
+
+Además de obtener el contador correctamente, debemos de mostrarlo, para esto,
+en nuestra estructura del HTML tenemos un `<span class="todo-count"></span>`, el
+cual podemos modificar su texto contenido para mostrar el valor del contador.
+Podemos hacerlo de la siguiente manera:
+
+```js
+let pendingTasks = 0;
+
+/** ...código anterior... */
+
+input.addEventListener('keydown', (event) => {
+  // Verificamos que la tecla presionada sea la de `Enter`
+  if (event.keyCode === 13) { // 13 es el código ascii de la tecla `Enter`
+    // código de agregar una tarea
+
+    newTodoCompleteCheckbox.addEventListener('change', (event) => {
+      // código de completar una tarea
+
+      // Si el estado del checkbox está marcado, restamos el contador
+      if (event.target.checked) {
+        pendingTasks -= 1;
+      } else {
+        // Caso contrario, aumentamos el contador
+        pendingTasks += 1;
+      }
+      // Actualizamos el contador en la UI
+      document.querySelector('.todo-count').textContent = pendingTasks;
+    });
+
+    newTodoDestroyButton.addEventListener('click', (event) => {
+      // código de eliminar una tarea
+
+      // Disminuimos el contador de tareas pendientes
+      pendingTasks -= 1;
+      // Actualizamos el contador en la UI
+      document.querySelector('.todo-count').textContent = pendingTasks;
+    });
+
+    // Aumentamos el contador de tareas pendientes
+    pendingTasks += 1;
+    // Actualizamos el contador en la UI
+    document.querySelector('.todo-count').textContent = pendingTasks;
+  }
+});
+
+/** ...código que prosigue... **/
+```
+
+Wowww! Lo logramos :tada:!! Puedes revisar el código completo en este [CodePen](https://codepen.io/ivandevp/pen/ZEzoRdB).
+
+> Nota: Si probaste este último paso, te darás cuenta que hay un caso que no
+> funciona bien, si tienes una solución, mándame un PR con un link a tu CodePen
+> donde esto funcione correctamente :wink:
