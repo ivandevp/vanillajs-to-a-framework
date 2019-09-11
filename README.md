@@ -49,14 +49,25 @@ aprendiendo sobre desarrollo web y front-end en particular.
 ### Base del proyecto
 
 Ya que nos vamos a enfocar en JS, partamos del punto en el que ya hemos realizado
-nuestro HTML y CSS, podría verse algo así:
+nuestro HTML y CSS, la estructura podría verse algo así:
 
-<p class="codepen" data-height="380" data-theme-id="0" data-default-tab="html,result" data-user="ivandevp" data-slug-hash="WNeJENZ" style="height: 380px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="todo-app-boilerplate">
-  <span>See the Pen <a href="https://codepen.io/ivandevp/pen/WNeJENZ/">
-  todo-app-boilerplate</a> by Ivan (<a href="https://codepen.io/ivandevp">@ivandevp</a>)
-  on <a href="https://codepen.io">CodePen</a>.</span>
-</p>
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+```html
+<!-- index.html -->
+<section class="todoapp">
+  <header class="header">
+    <h1>Tareas</h1>
+    <input class="new-todo" placeholder="¿Qué hay por hacer?" autofocus>
+  </header>
+  <section style="display:none" class="main">
+    <ul class="todo-list"></ul>
+    <footer class="footer">
+      <span class="todo-count"></span>
+    </footer>
+  </section>
+</section>
+```
+
+El boilerplate completo se puede encontrar [en este CodePen](https://codepen.io/ivandevp/pen/WNeJENZ).
 
 Aquí podemos que tenemos el título de la app y un input para comenzar a ingresar
 las tareas. Además de una sección oculta que contiene la estructura que se
