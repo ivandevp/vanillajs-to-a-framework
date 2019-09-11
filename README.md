@@ -72,3 +72,59 @@ El boilerplate completo se puede encontrar [en este CodePen](https://codepen.io/
 Aquí podemos que tenemos el título de la app y un input para comenzar a ingresar
 las tareas. Además de una sección oculta que contiene la estructura que se
 mostrará en el listado de tareas.
+
+### Pensemos la solución
+
+Antes de iniciar a codear, sería bueno que tengamos una idea de los pasos que
+necesitamos expresar a través de código.
+
+#### Agregar una tarea
+
+Para agregar una tarea, deberíamos capturar el texto (tarea) que ingresa el
+usuario y que al presionar la tecla `Enter`(`⏎`), se muestre en forma de un
+listado junto con un checkbox que pueda usar para marcarla como completado y un
+ícono de eliminar cuando se haga un hover sobre la tarea agregada.
+
+#### Completar una tarea
+
+Una vez mostrado el listado de tareas, debemos de permitir a la usuaria dar click
+en el checkbox de una tarea y mostrar una respuesta en la UI que de la percepción
+de que dicha tarea fue completada (en nuestro caso, la reacción será que el texto
+de la tarea aparezca tachada).
+
+#### Eliminar una tarea
+
+Al estar posicionando el cursor sobre una tarea del listado, un ícono de eliminar
+debería aparecer y si la usuaria le da click, dicha tarea debería desaparecer de
+la interface.
+
+#### Contar las tareas restantes
+
+En cada interacción que la usuaria realice, se debería verificar si existen
+tareas sin completar para mostrar la cantidad de las mismas.
+
+### Hagamos la magia
+
+Teniendo en cuenta los procesos que deben suceder en nuestra aplicación,
+hagámosla realidad.
+
+Primero lo primero, partamos por agregar una tarea. Debido a que el usuario
+presionará la tecla `Enter` para agregar la tarea, necesitamos estar pendiente
+de dicha interacción, lo cual lo logramos a través de agregar un _listener_
+(escuchador) al evento del teclado. Para esto, tenemos 3 eventos que podrían
+ayudarnos: `keypress`, `keydown` o `keyup`. Los cuales nos permiten saber cuando
+el usuario está presionando una tecla, cuando la tiene presionada o cuando dejó
+de presionar la tecla. Para este caso, nos interesa averiguar si la tecla que ha
+presionado es la de `Enter`, por lo que escogeré el evento `keydown`.
+
+> Nota: Se puede usar cualquiera de los otros eventos para este caso en particular.
+
+```js
+// Obtenemos el elemento que queremos registrar un escuchador de eventos (input)
+const input = document.querySelector('input.new-todo');
+
+// Agregamos un escuchador del evento `keydown`
+input.addEventListener('keydown', () => {
+  // TODO: Hacer lo restante una vez lanzado el evento
+});
+```
