@@ -26,3 +26,31 @@ del lenguaje, interacción con el DOM, etc) en su implementación.
 > front-end como en el back-end y hay frameworks con múltiples propósitos. En
 > este documento, solo nos enfocaremos hacia aquellos que nos ayudan a construir
 > interfaces interactivas de alto rendimiento.
+
+## La forma de Vanilla JS
+
+Listo, imaginemos que vamos a construir un _Todo App_ con HTML, CSS y Vanilla JS.
+Personalmente, me gusta empezar cualquier proyecto teniendo una idea clara de lo
+que queremos lograr. Así que aquí está un ejemplo del resultado esperado:
+
+![Todo App Demo](https://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2016/06/1466857427angular2-todo-app.gif)
+
+En resumen, se trata de una aplicación que:
+
+* Nos permite ingresar tareas a través de un input.
+* Podemos marcar una tarea como completada.
+* Podemos eliminar las tareas.
+* Nos muestra la cantidad de tareas que faltan completar.
+
+Teniendo el contexto claro, empecemos por analizar, una de las formas de llevar
+a cabo esta aplicación con los conocimientos de alguien que recién está
+aprendiendo sobre desarrollo web y front-end en particular.
+
+### Base del proyecto
+
+Ya que nos vamos a enfocar en JS, partamos del punto en el que ya hemos realizado
+nuestro HTML y CSS, podría verse algo así:
+
+<iframe height="380" style="width: 100%;" scrolling="no" title="todo-app-boilerplate" src="//codepen.io/ivandevp/embed/WNeJENZ/?height=380&theme-id=0&default-tab=html,result" frameborder="no" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/ivandevp/pen/WNeJENZ/'>todo-app-boilerplate</a> by Ivan
+  (<a href='https://codepen.io/ivandevp'>@ivandevp</a>) on <a href='https://codepen.io'>CodePen</a>.
