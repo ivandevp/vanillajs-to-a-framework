@@ -426,3 +426,45 @@ en caso no está agregada o eliminarla si en caso ya está agregada. Y con eso
 logramos nuestro segundo paso :tada: :balloon:!!
 
 Puedes revisar el código hasta este punto en [este pen](https://codepen.io/ivandevp/pen/wvwjXBx).
+
+Yay! Tenemos 2 pasos de 4 completados. Vamos por el tercero, este implica darle
+vida al botón de eliminar una tarea. Al igual que el paso anterior, necesitamos
+agregarle una acción al botón cuando la usuario le de click, usaremos un evento
+para esto:
+
+```js
+/** ...código anterior... */
+
+// Registramos un escuchador para el evento click del <button type="destroy" />
+newTodoDestroyButton.addEventListener('click', (event) => {
+
+});
+
+/** ...código que prosigue... **/
+```
+
+Para eliminar una tarea, literalmente necesitamos quitar el elemento `<li />` del
+HTML, y esto lo logramos con los métodos de la API del DOM:
+
+```js
+/** ...código anterior... */
+
+// Registramos un escuchador para el evento click del <button type="destroy" />
+newTodoDestroyButton.addEventListener('click', (event) => {
+  // Obtenemos el <div class="view" />
+  const divContainer = event.target.parentElement;
+  // Obtenemos el <li class="new-todo" />
+  const todoElement = divContainer.parentElement;
+
+  // Quitamos el elemento del HTML
+  todoElement.remove();
+});
+
+/** ...código que prosigue... **/
+```
+
+Al igual que en el paso anterior, necesitamos acceder desde el botón que la usuaria
+da click hasta el elemento de la lista (`<li />`) y haciendo uso del método
+`.remove()` nos basta para quitar por completo dicho elemento de nuestro HTML.
+
+Puedes ver el código que llevamos hasta este punto en [este CodePen](https://codepen.io/ivandevp/pen/mdbLKGG).
