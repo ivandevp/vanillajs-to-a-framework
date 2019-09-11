@@ -124,7 +124,150 @@ presionado es la de `Enter`, por lo que escogeré el evento `keydown`.
 const input = document.querySelector('input.new-todo');
 
 // Agregamos un escuchador del evento `keydown`
-input.addEventListener('keydown', () => {
+input.addEventListener('keydown', (event) => {
   // TODO: Hacer lo restante una vez lanzado el evento
+});
+```
+
+Bien, el método `.addEventListener()` ejecutará el callback que le pasamos como
+segundo argumento cuando el evento suceda. Sin embargo, este evento se ejecutará
+cada vez que el usuario presione una tecla y en nuestro caso solo queremos hacer
+nuestro proceso cuando la tecla presionada haya sido un `Enter`. Una de las
+formas de detectar esto, es usando el objeto de evento que nos llega al callback
+a través del parámetro que hemos idenficado como `event`. Este es un objeto que
+nos da información acerca del evento que se está "disparando", entre sus
+propiedades se encuentra `key` y `keyCode` que contienen los valores de la tecla
+que presionamos y el código ascii de la misma, respectivamente. Podemos usar
+cualquiera de estas propiedades del objeto para limitar la ejecución de nuestro
+código. Para este ejemplo, usaremos `keyCode`:
+
+```js
+/** ...código anterior... */
+
+input.addEventListener('keydown', (event) => {
+  // Verificamos que la tecla presionada sea la de `Enter`
+  if (event.keyCode === 13) { // 13 es el código ascii de la tecla `Enter`
+    // TODO: Agregar la nueva tarea
+  }
+});
+```
+
+En el código anterior, vemos que hacemos una validación a través de la sentencia
+`if`, en la cual, todo el código que pongamos dentro del bloque (`{}`) que sigue
+a esta sentencia se ejecutará solo si la condición se cumple (es verdadera).
+
+Ahora, necesitamos averiguar lo que el usuario escribió en el `input` y crear un
+elemento a partir del mismo que podamos agregar a nuestra interfaz de usuario.
+Para recuperar lo que el usuario escribió, podemos aprovechar la propiedad `value`
+que todos los elementos `input` contienen y que se pueden acceder a través de la
+API del DOM. Una forma de llevar esto acabo podría ser obteniendo el elemento con
+un método como el que usamos para obtener dicho `input` (`document.querySelector()`),
+no obstante, podemos reutilizar esta variable global que tenemos en un paso previo,
+o mejor aun, para no depender de un ámbito global, podemos volver a sacar provecho
+del objeto del evento que también nos da información acerca del elemento sobre
+el que se está ejecutando el evento, esto lo encontramos en la propiedad `.target`.
+Llevando esto a código, quedaría así:
+
+```js
+/** ... código anterior, incluyendo el evento */
+
+// La propiedad `value  nos devolverá lo que el usuario escribió en el input
+// que referenciamos a través del `event.target`
+const todo = event.target.value;
+```
+
+El valor almacenado en la variable `todo` será de tipo `string` (texto), dado
+que es el valor de retorno definido por la API del DOM. Con este texto, podemos
+comenzar a crear los elementos visuales que agregaremos a la interfaz de usuario
+a través del DOM. Para esto haremos uso del método `document.createElement()`.
+Para saber qué elemento debemos crear, debemos de revisar nuestra estructura del
+HTML, en nuestro caso, dentro de la sección oculta, vemos que existe una lista
+desordenada (`<ul></ul>`) que tiene un atributo de clase, es aquí donde podemos
+agregar las tareas nuevas, dado que el contenedor es una `ul`, podemos inferir
+que un elemento apropiado sería un elemento de la lista (`<li>`). Veamos como
+podemos crearla:
+
+```js
+/** ...código anterior... */
+
+// Obtenemos el contenedor existente en el HTML
+const todoContainer = document.querySelector('.todo-list');
+// Creamos nuestro li y lo almacenamos en una variable
+const newTodoElement = document.createElement('li');
+// Agregamos una clase al elemento recientemente creado, esto para darle estilos
+newTodoElement.classList.add('new-todo');
+// Asignamos el texto del elemento creato al valor que almacena la variable `todo`
+newTodoElement.textContent = todo;
+// El elemento que creamos solo existe en JS, tenemos que agregarlo al HTML para
+// que el usuario pueda visualizarlo
+todoContainer.append(newTodoElement);
+```
+
+La propiedad `.classList` nos permite acceder a las clases que tiene un elemento
+del DOM, con el método `.add()` agregamos una clase a dicha colección. Por su
+parte, la propiedad `.textContent` nos permite acceder y/o establecer el
+contenido de texto de un elemento, en este caso, lo estamos estableciendo al
+valor que recuperamos previamente (lo que el usuario escribió). Por último, todo
+esto sucede en la memoria de la computadora que sostiene la ejecución de nuestro
+código de JS, pero eso es algo que la usuaria no ve, para que sea visible debe
+de estar en el HTML, con el método `.append()` aplicado a un elemento existente
+(nuestro contenedor) podemos agregar el elemento que acabamos de crear al árbol
+del DOM, por ende al HTML.
+
+Todo bien, pero si prueban su código aun no se ve la tarea cuando presionan
+`Enter`. Esto es debido a que la lista de tareas se encuentran dentro de una
+sección con clase `main` que tiene un estilo en línea que maneja el `display`
+de la sección, inicialmente con valor `none` por lo que a pesar que nuestro
+elemento se ha agregado, no se puede ver. Para solucionar esto, debemos de
+cambiar el display a alguno distinto de `none`, como es una `section` y su display
+por defecto al ser un elemento de bloque sería `block`, vamos a establecerlo a
+dicho valor de la siguiente manera:
+
+```js
+/** ...código anterior... */
+
+// Obtenemos el elemento con clase "main"
+const mainContainer = document.querySelector('.main');
+// Accedemos a la propiedad style y cambiamos el valor de la propiedad display a `block`
+mainContainer.style.display = 'block';
+```
+
+La API del DOM nos provee una propiedad para interactuar con los estilos de un
+elemento directamente, esta propiedad es `.style` y con una asignación (`=`)
+podemos cambiar su valor.
+
+Si volvemos a probar nuestro código, veremos que funciona! :tada:
+
+Nuestro código imperativo quedaría así de momento:
+
+```js
+// Obtenemos el elemento que queremos registrar un escuchador de eventos (input)
+const input = document.querySelector('input.new-todo');
+
+// Agregamos un escuchador del evento `keydown`
+input.addEventListener('keydown', (event) => {
+  // Verificamos que la tecla presionada sea la de `Enter`
+  if (event.keyCode === 13) { // 13 es el código ascii de la tecla `Enter`
+    // La propiedad `value  nos devolverá lo que el usuario escribió en el input
+    // que referenciamos a través del `event.target`
+    const todo = event.target.value;
+
+    // Obtenemos el contenedor existente en el HTML
+    const todoContainer = document.querySelector('.todo-list');
+    // Creamos nuestro li y lo almacenamos en una variable
+    const newTodoElement = document.createElement('li');
+    // Agregamos una clase al elemento recientemente creado, esto para darle estilos
+    newTodoElement.classList.add('new-todo');
+    // Asignamos el texto del elemento creato al valor que almacena la variable `todo`
+    newTodoElement.textContent = todo;
+    // El elemento que creamos solo existe en JS, tenemos que agregarlo al HTML para
+    // que el usuario pueda visualizarlo
+    todoContainer.append(newTodoElement);
+
+    // Obtenemos el elemento con clase "main"
+    const mainContainer = document.querySelector('.main');
+    // Accedemos a la propiedad style y cambiamos el valor de la propiedad display a `block`
+    mainContainer.style.display = 'block';
+  }
 });
 ```
