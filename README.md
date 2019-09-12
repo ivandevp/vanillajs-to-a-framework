@@ -593,3 +593,163 @@ Vamos a refactorizar nuestro código, para que esté más decente:
 > Nota: No nos vamos a enfocar en los pasos de refactorización porque van fuera
 > del objetivo de este documento, pero si te interesa ver o leer el proceso,
 > puedes abrir un issue solicitándolo :wink:.
+
+## Intro a Frameworks Front-end
+
+Comienza lo bueno! Cuando decidimos crear una aplicación web usando algún
+framework o librería de front-end moderno, algunos conceptos nuevos y raros al
+principio se dan a conocer. Conceptos como componentes y su ciclo de vida, 
+estado de la aplicación, single page apps, enrutamiento, etc. 
+
+Empecemos por definir alguno de ellos:
+
+### Componentes
+
+El concepto de componentes es lo más similar que personalmente encuentro a una
+función en código, ya que, las funciones son unidades de código que en base a un
+dato de entrada o no agrupan y realizan instrucciones, que pueden ser 
+reutilizables en más de una parte de tu programa y que se pueden testear de 
+manera individual garantizando su correcto funcionamiento. De igual manera, un 
+componente es la unidad de una interfaz de usuario que engloba cierto 
+comportamiento y representación visual que puede ser reutilizable en diferentes 
+pantallas y testeable de manera aislada, además, dicho comportamiento y 
+representación puede variar en base a datos de entrada.
+
+Ejemplo de una función:
+
+```js
+function getNumberOfAvailableSeats(seats) {
+  const availableSeats = seats.filter(seat => seat.available);
+  return availableSeats.length;
+}
+```
+
+En el ejemplo anterior, tenemos una función que calcula la cantidad de asientos
+disponibles de un restaurante. Independientemente de la implementación, la 
+función recibe un arreglo de asientos que al menos sabemos que tiene una 
+propiedad `available` que indica si está disponible o no (`{ id: number, available: boolean } `)
+y sabiendo esto, retorna la cantidad de asientos disponibles. Esta función, se
+podría usar para cualquier establecimiento que tenga una manera de representar
+su disponibilidad de asientos en una estructura similar a la que nosotros estamos
+esperando.
+
+Ejemplo de un componente:
+
+```jsx
+function StudentCard({ student }) {
+  return (
+    <div>
+      <h3>{student.name}</h3>
+      <figure>
+        <img src={student.photo} alt={student.name} />
+      </figure>
+
+      <p>{student.bio}</p>
+      <p>
+        Contact me @
+        <a href={student.github.link} target="_blank">
+          <strong>{student.github.username}</strong>
+        </a>
+      </p>
+    </div>
+  );
+}
+```
+
+En este caso, estamos mostrando un componente llamado `StudentCard` que muestra
+la información de un estudiante en formato de una tarjeta de presentación. Este
+componente recibe un dato de entrada llamado `student` que es un objeto que 
+contiene propiedades como `name`, `photo`, `bio` y `github`, a cambio nos 
+devuelve un bloque de una interfaz de usuario que se podría aplicar a cualquier
+estudiante que contenga una información similar.
+
+De esta manera, tal vez un poco abstracta aun y sintaxis extraña, pero obviando
+estos detalles, podemos ver que un componente es lo más similar a una función 
+pero aplicada a la interfaz de usuario.
+
+### Ciclo de vida de un componente
+
+Cuando hablamos de la interfaz de usuario en un entorno gráfico, al principio no
+nos damos cuenta que esta unidad gráfica pasa por un proceso interno desde que
+se muestra hasta que la dejamos de ver. Si nos enfocamos en el navegador, por
+ejemplo, nosotros normalmente vemos que ponemos una URL y aparece nuestra página
+que hoy en día ya sabemos que está realizada a base de HTML, CSS, JavaScript y
+algunos otros recursos estáticos; sin embargo, mucha magia pasa detrás. 
+
+Sin ahondar demasiado, el navegador realiza algunos procesos antes de mostrar lo
+que terminamos viendo, por ejemplo, el código HTML se convierte a una estructura
+de árbol que es lo que conocemos como DOM y CSSOM, en paralelo, está calculando 
+cuáles de estos elementos realmente se va a mostrar, porque al final puedes tener
+una etiqueta HTML con un estilo `display: none;` y este a pesar que existe no se
+terminará viendo en el navegador. Una vez calculado estos elementos visibles, se
+calcula las posiciones en las que se va mostrar (si bien suena simple, hay mucha
+lógica detrás ya que es un espacio 2D pero que se puede agregar complejidad a 
+través de las diversas propiedades de CSS que existen). Por último, todos estos
+cálculos se terminan pintando en el navegador y es lo que terminamos viendo como
+interfaz de usuario de un sitio web. Gracias a la capacidad de procesamiento de
+las computadoras, no notamos como usuarios todo este proceso y nos da la impresión
+de ser mucho más simple de lo que es. 
+
+Ok, muy cool to esto como cultura general, pero, ¿en dónde entra el ciclo de 
+vida en todo esto?. Resulta que hay diversas etapas por la que pasa una interfaz
+de usuario:
+
+* Cuando el componente está en proceso de creación, aun no se ve en el entorno,
+  pero se está calculando y procesando sus estilos, posición, datos a mostrar, 
+  etc.
+* Cuando se está mostrando, es en este momento en el que decide si debe mostrarse
+  en color rojo si algo calculado en el paso previo está mal o en color verde si
+  todo está bien, por dar un ejemplo.
+* Después de que ya se creó el componente, una vez visible en el entorno.
+* Cuando los datos de entrada de un componente se actualiza, si esto ocurre, 
+  generará casi todo el proceso explicado nuevamente.
+* En algunos casos, podemos decidir si a pesar que los datos de entrada cambiaron,
+  actualizar el componente o no.
+* Después que se hizo una actualización de un componente, esto quiere decir que
+  el componente ya existía previamente y esto se puede ejecutar más de una vez.
+* Por último, cuando el componente deja de existir, esto sucede normalmente 
+  cuando lo dejamos de ver, por ejemplo, si estamos viendo un modal, pero al dar
+  click en un botón, nos redirecciona a otra página, cuando esto sucede, el modal
+  que estábamos viendo, deja de existir.
+
+Este proceso, es algo muy abstracto y que a veces ni pensamos en ellos, pero nos
+serán de gran ayuda cuando queramos realizar cierto tipos de acciones que es 
+mejor manejarlo en cierto momento en vez de otro.
+
+```jsx
+class Componente {
+  user = null;
+
+  componenteConstruido() {
+    // Conéctate a un servicio que te de el usuario
+  }
+
+  componenteSeVaActualizar() {
+    // Verifica si el usuario está habilitado para ver este componente o no
+  }
+
+  componenteActualizado() {
+    // Actualiza los estilos del nombre de usuario porque es más largo que X
+    // longitud
+  }
+
+  componenteDejaraExistir() {
+    // Quita todos los eventos que agregaste para que no se queden en memoria
+    // innecesariamente
+  }
+
+  pinta() {
+    // Muestra la interfaz de usuario, ya sea cuando se crea o actualiza
+    return (
+      <h1>Hola {this.user}</h1>
+    );
+  }
+}
+```
+
+El código anterior es un ejemplo en pseudocódigo de cómo se podría ver expresado
+el ciclo de vida de un componente.
+
+### Estado de la aplicación
+
+TO DO...
