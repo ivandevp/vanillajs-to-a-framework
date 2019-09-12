@@ -574,3 +574,22 @@ Wowww! Lo logramos :tada:!! Puedes revisar el código completo en este [CodePen]
 > Nota: Si probaste este último paso, te darás cuenta que hay un caso que no
 > funciona bien, si tienes una solución, mándame un PR con un link a tu CodePen
 > donde esto funcione correctamente :wink:
+
+Genial. Ya tenemos algo funcional, pero nos toca ser un poco críticos respecto al
+código que acabamos de hacer, ciertas cosas no se ven bien:
+
+* El código es completamente imperativo, le estamos diciendo exactamente qué
+  hacer en cada línea de código.
+* Todo vive en una función que se está pasando como argumento de un evento.
+* No se puede testear nada de este código.
+* Si volvemos a este código en un tiempo X, probablemente tengamos que leer todo
+  el código para saber qué hicimos, a pesar de que está comentado prácticamente
+  en cada línea (esto por fines de explicar lo que estamos haciendo, no porque
+  lo necesite).
+
+Vamos a refactorizar nuestro código, para que esté más decente:
+[CodeSandbox](https://codesandbox.io/s/xenodochial-heisenberg-zxxsu?fontsize=14)
+
+> Nota: No nos vamos a enfocar en los pasos de refactorización porque van fuera
+> del objetivo de este documento, pero si te interesa ver o leer el proceso,
+> puedes abrir un issue solicitándolo :wink:.
