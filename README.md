@@ -588,7 +588,9 @@ código que acabamos de hacer, ciertas cosas no se ven bien:
   lo necesite).
 
 Vamos a refactorizar nuestro código, para que esté más decente:
-[CodeSandbox](https://codesandbox.io/s/xenodochial-heisenberg-zxxsu?fontsize=14)
+[CodeSandbox](https://codesandbox.io/s/xenodochial-heisenberg-zxxsu?fontsize=14)*
+
+* _En progreso, toda ayuda es bienvenida :smiley:_
 
 > Nota: No nos vamos a enfocar en los pasos de refactorización porque van fuera
 > del objetivo de este documento, pero si te interesa ver o leer el proceso,
@@ -598,8 +600,8 @@ Vamos a refactorizar nuestro código, para que esté más decente:
 
 Comienza lo bueno! Cuando decidimos crear una aplicación web usando algún
 framework o librería de front-end moderno, algunos conceptos nuevos y raros al
-principio se dan a conocer. Conceptos como componentes y su ciclo de vida, 
-estado de la aplicación, single page apps, enrutamiento, etc. 
+principio se dan a conocer. Conceptos como componentes y su ciclo de vida,
+estado de la aplicación, single page apps, enrutamiento, etc.
 
 Empecemos por definir alguno de ellos:
 
@@ -607,12 +609,12 @@ Empecemos por definir alguno de ellos:
 
 El concepto de componentes es lo más similar que personalmente encuentro a una
 función en código, ya que, las funciones son unidades de código que en base a un
-dato de entrada o no agrupan y realizan instrucciones, que pueden ser 
-reutilizables en más de una parte de tu programa y que se pueden testear de 
-manera individual garantizando su correcto funcionamiento. De igual manera, un 
-componente es la unidad de una interfaz de usuario que engloba cierto 
-comportamiento y representación visual que puede ser reutilizable en diferentes 
-pantallas y testeable de manera aislada, además, dicho comportamiento y 
+dato de entrada o no agrupan y realizan instrucciones, que pueden ser
+reutilizables en más de una parte de tu programa y que se pueden testear de
+manera individual garantizando su correcto funcionamiento. De igual manera, un
+componente es la unidad de una interfaz de usuario que engloba cierto
+comportamiento y representación visual que puede ser reutilizable en diferentes
+pantallas y testeable de manera aislada, además, dicho comportamiento y
 representación puede variar en base a datos de entrada.
 
 Ejemplo de una función:
@@ -625,8 +627,8 @@ function getNumberOfAvailableSeats(seats) {
 ```
 
 En el ejemplo anterior, tenemos una función que calcula la cantidad de asientos
-disponibles de un restaurante. Independientemente de la implementación, la 
-función recibe un arreglo de asientos que al menos sabemos que tiene una 
+disponibles de un restaurante. Independientemente de la implementación, la
+función recibe un arreglo de asientos que al menos sabemos que tiene una
 propiedad `available` que indica si está disponible o no (`{ id: number, available: boolean } `)
 y sabiendo esto, retorna la cantidad de asientos disponibles. Esta función, se
 podría usar para cualquier establecimiento que tenga una manera de representar
@@ -658,13 +660,13 @@ function StudentCard({ student }) {
 
 En este caso, estamos mostrando un componente llamado `StudentCard` que muestra
 la información de un estudiante en formato de una tarjeta de presentación. Este
-componente recibe un dato de entrada llamado `student` que es un objeto que 
-contiene propiedades como `name`, `photo`, `bio` y `github`, a cambio nos 
+componente recibe un dato de entrada llamado `student` que es un objeto que
+contiene propiedades como `name`, `photo`, `bio` y `github`, a cambio nos
 devuelve un bloque de una interfaz de usuario que se podría aplicar a cualquier
 estudiante que contenga una información similar.
 
 De esta manera, tal vez un poco abstracta aun y sintaxis extraña, pero obviando
-estos detalles, podemos ver que un componente es lo más similar a una función 
+estos detalles, podemos ver que un componente es lo más similar a una función
 pero aplicada a la interfaz de usuario.
 
 ### Ciclo de vida de un componente
@@ -674,46 +676,46 @@ nos damos cuenta que esta unidad gráfica pasa por un proceso interno desde que
 se muestra hasta que la dejamos de ver. Si nos enfocamos en el navegador, por
 ejemplo, nosotros normalmente vemos que ponemos una URL y aparece nuestra página
 que hoy en día ya sabemos que está realizada a base de HTML, CSS, JavaScript y
-algunos otros recursos estáticos; sin embargo, mucha magia pasa detrás. 
+algunos otros recursos estáticos; sin embargo, mucha magia pasa detrás.
 
 Sin ahondar demasiado, el navegador realiza algunos procesos antes de mostrar lo
 que terminamos viendo, por ejemplo, el código HTML se convierte a una estructura
-de árbol que es lo que conocemos como DOM y CSSOM, en paralelo, está calculando 
+de árbol que es lo que conocemos como DOM y CSSOM, en paralelo, está calculando
 cuáles de estos elementos realmente se va a mostrar, porque al final puedes tener
 una etiqueta HTML con un estilo `display: none;` y este a pesar que existe no se
 terminará viendo en el navegador. Una vez calculado estos elementos visibles, se
 calcula las posiciones en las que se va mostrar (si bien suena simple, hay mucha
-lógica detrás ya que es un espacio 2D pero que se puede agregar complejidad a 
+lógica detrás ya que es un espacio 2D pero que se puede agregar complejidad a
 través de las diversas propiedades de CSS que existen). Por último, todos estos
 cálculos se terminan pintando en el navegador y es lo que terminamos viendo como
 interfaz de usuario de un sitio web. Gracias a la capacidad de procesamiento de
 las computadoras, no notamos como usuarios todo este proceso y nos da la impresión
-de ser mucho más simple de lo que es. 
+de ser mucho más simple de lo que es.
 
-Ok, muy cool to esto como cultura general, pero, ¿en dónde entra el ciclo de 
+Ok, muy cool to esto como cultura general, pero, ¿en dónde entra el ciclo de
 vida en todo esto?. Resulta que hay diversas etapas por la que pasa una interfaz
 de usuario:
 
 * Cuando el componente está en proceso de creación, aun no se ve en el entorno,
-  pero se está calculando y procesando sus estilos, posición, datos a mostrar, 
+  pero se está calculando y procesando sus estilos, posición, datos a mostrar,
   etc.
 * Cuando se está mostrando, es en este momento en el que decide si debe mostrarse
   en color rojo si algo calculado en el paso previo está mal o en color verde si
   todo está bien, por dar un ejemplo.
 * Después de que ya se creó el componente, una vez visible en el entorno.
-* Cuando los datos de entrada de un componente se actualiza, si esto ocurre, 
+* Cuando los datos de entrada de un componente se actualiza, si esto ocurre,
   generará casi todo el proceso explicado nuevamente.
 * En algunos casos, podemos decidir si a pesar que los datos de entrada cambiaron,
   actualizar el componente o no.
 * Después que se hizo una actualización de un componente, esto quiere decir que
   el componente ya existía previamente y esto se puede ejecutar más de una vez.
-* Por último, cuando el componente deja de existir, esto sucede normalmente 
+* Por último, cuando el componente deja de existir, esto sucede normalmente
   cuando lo dejamos de ver, por ejemplo, si estamos viendo un modal, pero al dar
   click en un botón, nos redirecciona a otra página, cuando esto sucede, el modal
   que estábamos viendo, deja de existir.
 
 Este proceso, es algo muy abstracto y que a veces ni pensamos en ellos, pero nos
-serán de gran ayuda cuando queramos realizar cierto tipos de acciones que es 
+serán de gran ayuda cuando queramos realizar cierto tipos de acciones que es
 mejor manejarlo en cierto momento en vez de otro.
 
 ```jsx
@@ -752,4 +754,97 @@ el ciclo de vida de un componente.
 
 ### Estado de la aplicación
 
-TO DO...
+El estado de la aplicación es uno de los conceptos más abstractos que me costó
+entender cuando me enfrenté a un framework de front-end moderno, a pesar de que
+siempre ha estado presente en todo proyecto que hayamos realizado de manera
+intrínseca. La manera en como yo defino este concepto es **todo valor que puede
+causar un cambio en la interfaz de usuario**.
+
+¿Qué quiere decir esto? Veamos, todo valor quiere decir que no importa el tipo
+que este tenga, puede ser un booleano, número, texto, una estructura más compleja
+como un objeto, arreglo, etc. Lo importante viene entender a qué nos referimos
+que causa un cambio en la UI; si nos ponemos a analizar más a fondo casos comunes
+que encontramos en diversas interfaces, por ejemplo, es común que cuando
+mostramos ciertos datos, hagamos un request a un API que nos otorgue dichos datos
+y mientras eso ocurre, nosotros agregamos alguna forma de darle al usuario la
+experiencia de que estamos procesando su petición pero que toma cierto tiempo.
+Para lograr esto, estamos usando un estado, el cual nos indica cuando está
+cargando los datos de la API y su valor cambia una vez que obtenemos la respuesta
+del servidor. Este cambio de valor en el estado, causa un cambio en la interfaz
+de usuario, pues si bien estábamos mostrando un spinner de carga con el valor
+inicial del estado, ahora estaríamos mostrando una tabla con el listado de datos.
+
+Imaginemos como se vería en el código:
+
+* Definimos nuestro estado con un valor inicial:
+
+  ```js
+  const state = {
+    isLoading: true,
+  };
+  ```
+
+  Aquí estamos indicando que el estado es un objeto (esto porque en una misma
+  interfaz puede haber más de un estado que cause cambios de UI) con una
+  propiedad indicando que tendremos un estado llamado `isLoading`, el cual es un
+  booleano con un valor por defecto de `true`.
+
+* Imaginemos que mandamos a llamar nuestra API de manera asíncrona, y una vez que
+  obtengamos la respuesta, actualizaremos el estado:
+
+  ```js
+  // En alguna parte de nuestro código
+  getStudents({ city: 'Lima' })
+    .then((students) => {
+      // TODO: Obtenemos las estudiantes y hacemos algo con esos datos
+
+      // Actualizamos el estado de carga, porque ahora ya obtuvimos la respuesta
+      component.updateState({ isLoading: false });
+    });
+  ```
+
+  Aquí estamos mandando a llamar a una función `getStudents()` que recibe ciertos
+  argumentos para obtener datos más específicos, dicha función retorna una promesa
+  en la cual estamos anidando el método `.then()` para hacer algo cuando la
+  promesa se resuelva satisfactoriamente, imaginemos que procesamos los datos
+  obtenidos y hacemos algo con ello, pero, además, debemos actualizar la UI para
+  que la usuaria no piense que seguimos procesando algo. Los frameworks proveen
+  una forma de hacer esta actualización de estado de manera diferente, en este
+  ejemplo, estamos usando un método que suponemos viene con cada definición de
+  componente.
+
+* Ok, todo bien con actualizar una variable global (eso parece ser lo que hemos
+  hecho, sin embargo, la magia viene ahora), pero ahora ¿cómo se actualiza la UI?
+  Para esto, debemos de ver donde se define nuestra UI:
+
+  ```js
+  <div class="container">
+    if (state.isLoading) {
+      <Spinner />
+    } else {
+      <StudentsTable students="?" />
+    }
+  </div>
+  ```
+
+  La sintaxis que estamos usando no es parte de ningún framework en particular,
+  lo que busco es dar a mostrar el proceso de cómo el estado afecta nuestra UI.
+  Cuando el estado `isLoading` está en `true`, la usuario estará viendo un
+  componente `<Spinner />`, y una vez que su valor cambie a `false`, la usuaria
+  verá una tabla con las estudiantes que devolvió la API. Solo con un estado,
+  pudimos generar un componente con una UI que cambia en base al valor del mismo.
+
+> Nota: En el ejemplo anterior, pudimos haber agregado un par de estados más:
+> uno para manejar el error, porque existe la posibilidad que la petición a la
+> API falle y en ese caso, no queremos que se siga viendo el spinner de carga ni
+> la tabla de estudiantes (o tal vez sí :thinking:, tenemos el poder :muscle:);
+> y la colección de estudiantes per se, también es un estado, puesto que si la
+> colección cambia porque si la usuaria decide ver las estudiantes de otra ciudad
+> a pesar que la tabla que vería sería siendo igual a nivel de presentación, los
+> datos representados en dicha tabla cambiarían y eso también es considera un
+> cambio de UI.
+
+Con estos conceptos, espero te quede una mejor idea de qué es lo que vas a
+comenzar a agregar a tu vocabulario porque probablemente lo vayas a usar/decir
+muy a menudo. Ahora si, pasemos a ver la sintaxis de algunos de los frameworks
+front-end modernos :rocket:.
